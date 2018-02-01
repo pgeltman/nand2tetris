@@ -7,7 +7,7 @@
  * The ALU (Arithmetic Logic Unit).
  * Computes one of the following functions:
  * x+y, x-y, y-x, 0, 1, -1, x, y, -x, -y, !x, !y,
- * x+1, y+1, x-1, y-1, x&y, x|y on two 16-bit inputs, 
+ * x+1, y+1, x-1, y-1, x&y, x|y on two 16-bit inputs,
  * according to 6 input bits denoted zx,nx,zy,ny,f,no.
  * In addition, the ALU computes two 1-bit outputs:
  * if the ALU output == 0, zr is set to 1; otherwise zr is set to 0;
@@ -27,8 +27,8 @@
 // if (out < 0) set ng = 1
 
 CHIP ALU {
-    IN  
-        x[16], y[16],  // 16-bit inputs        
+    IN
+        x[16], y[16],  // 16-bit inputs
         zx, // zero the x input?
         nx, // negate the x input?
         zy, // zero the y input?
@@ -36,11 +36,69 @@ CHIP ALU {
         f,  // compute out = x + y (if 1) or x & y (if 0)
         no; // negate the out output?
 
-    OUT 
+    OUT
         out[16], // 16-bit output
         zr, // 1 if (out == 0), 0 otherwise
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
    // Put you code here:
+
+        //Arbitratry Xor with the same input, to alway return
+        Xor(a = zx, b = zx, out = fal);
+        Not(in = fal, out = tru);
+
+        //X Pre ADJUSTMENTS
+        PreALU(in = x[0], z = zx, n = nx, out = x0);
+        PreALU(in = x[1], z = zx, n = nx, out = x1);
+        PreALU(in = x[2], z = zx, n = nx, out = x2);
+        PreALU(in = x[3], z = zx, n = nx, out = x3);
+        PreALU(in = x[4], z = zx, n = nx, out = x4);
+        PreALU(in = x[5], z = zx, n = nx, out = x5);
+        PreALU(in = x[6], z = zx, n = nx, out = x6);
+        PreALU(in = x[7], z = zx, n = nx, out = x7);
+        PreALU(in = x[8], z = zx, n = nx, out = x8);
+        PreALU(in = x[9], z = zx, n = nx, out = x9);
+        PreALU(in = x[10], z = zx, n = nx, out = x10);
+        PreALU(in = x[11], z = zx, n = nx, out = x11);
+        PreALU(in = x[12], z = zx, n = nx, out = x12);
+        PreALU(in = x[13], z = zx, n = nx, out = x13);
+        PreALU(in = x[14], z = zx, n = nx, out = x14);
+        PreALU(in = x[15], z = zx, n = nx, out = x15);
+
+        //X Pre ADJUSTMENTS
+        PreALU(in = y[0], z = zy, n = ny, out = y0);
+        PreALU(in = y[1], z = zy, n = ny, out = y1);
+        PreALU(in = y[2], z = zy, n = ny, out = y2);
+        PreALU(in = y[3], z = zy, n = ny, out = y3);
+        PreALU(in = y[4], z = zy, n = ny, out = y4);
+        PreALU(in = y[5], z = zy, n = ny, out = y5);
+        PreALU(in = y[6], z = zy, n = ny, out = y6);
+        PreALU(in = y[7], z = zy, n = ny, out = y7);
+        PreALU(in = y[8], z = zy, n = ny, out = y8);
+        PreALU(in = y[9], z = zy, n = ny, out = y9);
+        PreALU(in = y[10], z = zy, n = ny, out = y10);
+        PreALU(in = y[11], z = zy, n = ny, out = y11);
+        PreALU(in = y[12], z = zy, n = ny, out = y12);
+        PreALU(in = y[13], z = zy, n = ny, out = y13);
+        PreALU(in = y[14], z = zy, n = ny, out = y14);
+        PreALU(in = y[15], z = zy, n = ny, out = y15);
+
+        MidALU(x = x0, y = y0, f = f, no = no, out = out[0]);
+        MidALU(x = x1, y = y1, f = f, no = no, out = out[1]);
+        MidALU(x = x2, y = y2, f = f, no = no, out = out[2]);
+        MidALU(x = x3, y = y3, f = f, no = no, out = out[3]);
+        MidALU(x = x4, y = y4, f = f, no = no, out = out[4]);
+        MidALU(x = x5, y = y5, f = f, no = no, out = out[5]);
+        MidALU(x = x6, y = y6, f = f, no = no, out = out[6]);
+        MidALU(x = x7, y = y7, f = f, no = no, out = out[7]);
+        MidALU(x = x8, y = y8, f = f, no = no, out = out[8]);
+        MidALU(x = x9, y = y9, f = f, no = no, out = out[9]);
+        MidALU(x = x10, y = y10, f = f, no = no, out = out[10]);
+        MidALU(x = x11, y = y11, f = f, no = no, out = out[11]);
+        MidALU(x = x12, y = y12, f = f, no = no, out = out[12]);
+        MidALU(x = x13, y = y13, f = f, no = no, out = out[13]);
+        MidALU(x = x14, y = y14, f = f, no = no, out = out[14]);
+        MidALU(x = x15, y = y15, f = f, no = no, out = out[15]);
+
 }

@@ -1,0 +1,23 @@
+CHIP PreALU {
+    IN
+        in,  // 16-bit inputs
+        z, // zero the input?
+        n; // negate the input?
+
+    OUT
+        out; // 16-bit output
+
+    PARTS:
+   // Put you code here:
+
+        //Arbitratry Xor with the same input, to alway return
+        Xor(a = z, b = z, out = tru);
+        Not(in = tru, out = fal);
+
+        //X ADJUSTMENTS
+        //Mux to either take the input, or null
+        Mux(a = in, b = fal, sel = z, out = postZ);
+        Not(in = postZ, out = notPostZ);
+        Mux(a = postZ, b = notPostZ, sel = n, out = out);
+
+}

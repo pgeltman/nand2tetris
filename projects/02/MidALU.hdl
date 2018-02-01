@@ -1,0 +1,25 @@
+CHIP MidALU {
+    IN
+        x,
+        y,
+        f, // function
+        no; // negate the output
+
+    OUT
+        out,
+        carry;
+
+    PARTS:
+   // Put you code here:
+
+        //Arbitratry Xor with the same input, to alway return
+        Xor(a = x, b = x, out = fal);
+        Not(in = fal, out = tru);
+
+        And(a = x, b = y, out = andOut);
+        HalfAdder(a = x, b = y, sum = sumOut, carry = carry);
+
+        Mux(a = andOut, b = sumOut, sel = f, out = muxOut);
+        Mux(a = muxOut, b = fal, sel = no, out = out);
+
+}
