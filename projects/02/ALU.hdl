@@ -84,21 +84,4 @@ CHIP ALU {
         PreALU(in = y[14], z = zy, n = ny, out = y14);
         PreALU(in = y[15], z = zy, n = ny, out = y15);
 
-        MidALU(x = x0, y = y0, f = f, no = no, out = out[0]);
-        MidALU(x = x1, y = y1, f = f, no = no, out = out[1]);
-        MidALU(x = x2, y = y2, f = f, no = no, out = out[2]);
-        MidALU(x = x3, y = y3, f = f, no = no, out = out[3]);
-        MidALU(x = x4, y = y4, f = f, no = no, out = out[4]);
-        MidALU(x = x5, y = y5, f = f, no = no, out = out[5]);
-        MidALU(x = x6, y = y6, f = f, no = no, out = out[6]);
-        MidALU(x = x7, y = y7, f = f, no = no, out = out[7]);
-        MidALU(x = x8, y = y8, f = f, no = no, out = out[8]);
-        MidALU(x = x9, y = y9, f = f, no = no, out = out[9]);
-        MidALU(x = x10, y = y10, f = f, no = no, out = out[10]);
-        MidALU(x = x11, y = y11, f = f, no = no, out = out[11]);
-        MidALU(x = x12, y = y12, f = f, no = no, out = out[12]);
-        MidALU(x = x13, y = y13, f = f, no = no, out = out[13]);
-        MidALU(x = x14, y = y14, f = f, no = no, out = out[14]);
-        MidALU(x = x15, y = y15, f = f, no = no, out = out[15]);
-
 }
