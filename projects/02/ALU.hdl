@@ -84,4 +84,22 @@ CHIP ALU {
         PreALU(in = y[14], z = zy, n = ny, out = y14);
         PreALU(in = y[15], z = zy, n = ny, out = y15);
 
+        MidALU(x = x0, y = y0, car = fal, f = f, no = no, out = out[0], carry = c0);
+        MidALU(x = x1, y = y1, car = c0, f = f, no = no, out = out[1], carry = c1);
+        MidALU(x = x2, y = y2, car = c1, f = f, no = no, out = out[2], carry = c2);
+        MidALU(x = x3, y = y3, car = c2, f = f, no = no, out = out[3], carry = c3);
+        MidALU(x = x4, y = y4, car = c3, f = f, no = no, out = out[4], carry = c4);
+        MidALU(x = x5, y = y5, car = c4, f = f, no = no, out = out[5], carry = c5);
+        MidALU(x = x6, y = y6, car = c5, f = f, no = no, out = out[6], carry = c6);
+        MidALU(x = x7, y = y7, car = c6, f = f, no = no, out = out[7], carry = c7);
+        MidALU(x = x8, y = y8, car = c7, f = f, no = no, out = out[8], carry = c8);
+        MidALU(x = x9, y = y9, car = c8, f = f, no = no, out = out[9], carry = c9);
+        MidALU(x = x10, y = y10, car = c9, f = f, no = no, out = out[10], carry = c10);
+        MidALU(x = x11, y = y11, car = c10, f = f, no = no, out = out[11], carry = c11);
+        MidALU(x = x12, y = y12, car = c11, f = f, no = no, out = out[12], carry = c12);
+        MidALU(x = x13, y = y13, car = c12, f = f, no = no, out = out[13], carry = c13);
+        MidALU(x = x14, y = y14, car = c13, f = f, no = no, out = out[14], carry = c14);
+        MidALU(x = x15, y = y15, car = c14, f = f, no = no, out = out[15], carry = c15);
+
+
 }
