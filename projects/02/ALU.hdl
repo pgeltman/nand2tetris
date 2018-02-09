@@ -99,7 +99,12 @@ CHIP ALU {
         MidALU(x = x12, y = y12, car = c11, f = f, no = no, out = out[12], carry = c12);
         MidALU(x = x13, y = y13, car = c12, f = f, no = no, out = out[13], carry = c13);
         MidALU(x = x14, y = y14, car = c13, f = f, no = no, out = out[14], carry = c14);
-        MidALU(x = x15, y = y15, car = c14, f = f, no = no, out = out[15], carry = c15);
+        MidALU(x = x15, y = y15, car = c14, f = f, no = no, out = out[15], carry = cX1);
+
+        //logic for the ng
+        MidALU(x = x15, y = y15, car = c14, f = f, no = no, out = ng, carry = cX2);
+
+
 
 
 }
