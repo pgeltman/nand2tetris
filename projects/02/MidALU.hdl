@@ -21,6 +21,9 @@ CHIP MidALU {
         FullAdder(a = x, b = y, c = car, sum = sumOut, carry = carry);
 
         Mux(a = andOut, b = sumOut, sel = f, out = muxOut);
-        Mux(a = muxOut, b = fal, sel = no, out = out);
+
+        Not(in = muxOut, out = notMuxOut);
+
+        Mux(a = muxOut, b = notMuxOut, sel = no, out = out);
 
 }
