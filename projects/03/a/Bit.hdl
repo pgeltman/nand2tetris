@@ -15,4 +15,15 @@ CHIP Bit {
 
     PARTS:
     // Put your code here:
+
+    //TICK
+
+    DFF(in = dI, out = dO);
+
+    Mux(a = dO, b = in, sel = load, out = dI, out = out);
+
+
+    //TOCK
+
+
 }
