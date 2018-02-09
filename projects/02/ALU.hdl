@@ -84,26 +84,92 @@ CHIP ALU {
         PreALU(in = y[14], z = zy, n = ny, out = y14);
         PreALU(in = y[15], z = zy, n = ny, out = y15);
 
-        MidALU(x = x0, y = y0, car = fal, f = f, no = no, out = out[0], carry = c0);
-        MidALU(x = x1, y = y1, car = c0, f = f, no = no, out = out[1], carry = c1);
-        MidALU(x = x2, y = y2, car = c1, f = f, no = no, out = out[2], carry = c2);
-        MidALU(x = x3, y = y3, car = c2, f = f, no = no, out = out[3], carry = c3);
-        MidALU(x = x4, y = y4, car = c3, f = f, no = no, out = out[4], carry = c4);
-        MidALU(x = x5, y = y5, car = c4, f = f, no = no, out = out[5], carry = c5);
-        MidALU(x = x6, y = y6, car = c5, f = f, no = no, out = out[6], carry = c6);
-        MidALU(x = x7, y = y7, car = c6, f = f, no = no, out = out[7], carry = c7);
-        MidALU(x = x8, y = y8, car = c7, f = f, no = no, out = out[8], carry = c8);
-        MidALU(x = x9, y = y9, car = c8, f = f, no = no, out = out[9], carry = c9);
-        MidALU(x = x10, y = y10, car = c9, f = f, no = no, out = out[10], carry = c10);
-        MidALU(x = x11, y = y11, car = c10, f = f, no = no, out = out[11], carry = c11);
-        MidALU(x = x12, y = y12, car = c11, f = f, no = no, out = out[12], carry = c12);
-        MidALU(x = x13, y = y13, car = c12, f = f, no = no, out = out[13], carry = c13);
-        MidALU(x = x14, y = y14, car = c13, f = f, no = no, out = out[14], carry = c14);
-        MidALU(x = x15, y = y15, car = c14, f = f, no = no, out = out[15], carry = cX1);
+        MidALU(x = x0, y = y0, car = fal, f = f, no = no, out = out0, carry = c0);
+        MidALU(x = x1, y = y1, car = c0, f = f, no = no, out = out1, carry = c1);
+        MidALU(x = x2, y = y2, car = c1, f = f, no = no, out = out2, carry = c2);
+        MidALU(x = x3, y = y3, car = c2, f = f, no = no, out = out3, carry = c3);
+        MidALU(x = x4, y = y4, car = c3, f = f, no = no, out = out4, carry = c4);
+        MidALU(x = x5, y = y5, car = c4, f = f, no = no, out = out5, carry = c5);
+        MidALU(x = x6, y = y6, car = c5, f = f, no = no, out = out6, carry = c6);
+        MidALU(x = x7, y = y7, car = c6, f = f, no = no, out = out7, carry = c7);
+        MidALU(x = x8, y = y8, car = c7, f = f, no = no, out = out8, carry = c8);
+        MidALU(x = x9, y = y9, car = c8, f = f, no = no, out = out9, carry = c9);
+        MidALU(x = x10, y = y10, car = c9, f = f, no = no, out = out10, carry = c10);
+        MidALU(x = x11, y = y11, car = c10, f = f, no = no, out = out11, carry = c11);
+        MidALU(x = x12, y = y12, car = c11, f = f, no = no, out = out12, carry = c12);
+        MidALU(x = x13, y = y13, car = c12, f = f, no = no, out = out13, carry = c13);
+        MidALU(x = x14, y = y14, car = c13, f = f, no = no, out = out14, carry = c14);
+        MidALU(x = x15, y = y15, car = c14, f = f, no = no, out = out15, carry = cX);
+
+        //set the outs to the output pins
+        Mux(a = out0, out = out[0]);
+        Mux(a = out1, out = out[1]);
+        Mux(a = out2, out = out[2]);
+        Mux(a = out3, out = out[3]);
+        Mux(a = out4, out = out[4]);
+        Mux(a = out5, out = out[5]);
+        Mux(a = out6, out = out[6]);
+        Mux(a = out7, out = out[7]);
+        Mux(a = out8, out = out[8]);
+        Mux(a = out9, out = out[9]);
+        Mux(a = out10, out = out[10]);
+        Mux(a = out11, out = out[11]);
+        Mux(a = out12, out = out[12]);
+        Mux(a = out13, out = out[13]);
+        Mux(a = out14, out = out[14]);
+        Mux(a = out15, out = out[15]);
+
 
         //logic for the ng
-        MidALU(x = x15, y = y15, car = c14, f = f, no = no, out = ng, carry = cX2);
 
+        Mux(a = out15, out = ng);
+
+        //logic to see if this is less than 0
+        Or16(
+          a[0] = out0, b[0] = out1,
+          a[1] = out2, b[1] = out3,
+          a[2] = out4, b[2] = out5,
+          a[3] = out6, b[3] = out7,
+          a[4] = out8, b[4] = out9,
+          a[5] = out10, b[5] = out11,
+          a[6] = out12, b[6] = out13,
+          a[7] = out14, b[7] = out15,
+
+          out[0] = a0,
+          out[1] = a1,
+          out[2] = a2,
+          out[3] = a3,
+          out[4] = a4,
+          out[5] = a5,
+          out[6] = a6,
+          out[7] = a7
+
+        );
+
+        Or16(
+          a[0] = a0, b[0] = a1,
+          a[1] = a2, b[1] = a3,
+          a[2] = a4, b[2] = a5,
+          a[3] = a6, b[3] = a7,
+
+          out[0] = b0,
+          out[1] = b1,
+          out[2] = b2,
+          out[3] = b3
+
+        );
+
+        Or16(
+          a[0] = b0, b[0] = b1,
+          a[1] = b2, b[1] = b3,
+
+          out[0] = d0,
+          out[1] = d1
+
+        );
+
+        Or(a = d0, b = d1, out = notIsZero);
+        Not(in=notIsZero, out = zr);
 
 
 
