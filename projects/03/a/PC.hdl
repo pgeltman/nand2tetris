@@ -12,9 +12,22 @@
  */
 
 CHIP PC {
-    IN in[16],load,inc,reset;
+    IN in[16], load, inc, reset;
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+
+    //add the incrementer to the count (1 for add, 0 for no add)
+    Add16(a = regCount, b[0] = inc, out = countInc);
+
+    //if load = 1, load the in
+    Mux16(a = countInc, b = in, sel = load, out = newCount);
+
+    //reset the register if the bit is 1
+    Mux16(a = newCount, b = false, sel = reset, out = finalCount);
+
+    //load the updated value into the register
+    Register(in = finalCount, load = true, out = regCount, out = out);
+
+
 }
