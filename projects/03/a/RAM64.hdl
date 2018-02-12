@@ -5,8 +5,8 @@
 
 /**
  * Memory of 64 registers, each 16 bit-wide. Out holds the value
- * stored at the memory location specified by address. If load==1, then 
- * the in value is loaded into the memory location specified by address 
+ * stored at the memory location specified by address. If load==1, then
+ * the in value is loaded into the memory location specified by address
  * (the loaded value will be emitted to out from the next time step onward).
  */
 
@@ -15,5 +15,21 @@ CHIP RAM64 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+
+    //disaggregate the first 3 bits of the address to find one of 8 RAM8
+    DMux8Way(in = load, sel = address[3..5], a = ram0load, b = ram1load, c = ram2load, d = ram3load, e = ram4load, f = ram5load, g = ram6load, h = ram7load);
+
+    RAM8(in= in, address = address[0..2], load = ram0load, out = ram0out);
+    RAM8(in= in, address = address[0..2], load = ram1load, out = ram1out);
+    RAM8(in= in, address = address[0..2], load = ram2load, out = ram2out);
+    RAM8(in= in, address = address[0..2], load = ram3load, out = ram3out);
+    RAM8(in= in, address = address[0..2], load = ram4load, out = ram4out);
+    RAM8(in= in, address = address[0..2], load = ram5load, out = ram5out);
+    RAM8(in= in, address = address[0..2], load = ram6load, out = ram6out);
+    RAM8(in= in, address = address[0..2], load = ram7load, out = ram7out);
+
+    //Only take the output from the ram that matches our first 3 input bits
+    Mux8Way16(a = ram0out, b = ram1out, c = ram2out, d = ram3out, e = ram4out, f = ram5out, g = ram6out, h = ram7out, sel = address[3..5], out = out);
+
+
 }
