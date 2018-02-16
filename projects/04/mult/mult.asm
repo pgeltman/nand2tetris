@@ -18,7 +18,7 @@ M=0
 @R1
 D=M
 @18 //last line of code + 1
-D;JGT
+D;JLE
 
 //save input1 into d register
 @R0
