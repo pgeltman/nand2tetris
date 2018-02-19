@@ -11,22 +11,38 @@
 // "white" in every pixel;
 // the screen should remain fully clear as long as no key is pressed.
 
-// Put your code here.
+//list all variables
+@keyIsPressed
+@screenRAM
+@maxCheck
+@maxRAM
 
-
+//maxRAM = 24576
+@24576
+D=A
+@maxRAM
+M=D
 
 (init)
 
-  //keyIsPressed = true;
+  //D = Keyboard Input
+  @24576
+  D=M
+
+  //if keyboard input > 0 then
+  @noKeyPress
+  D; JEQ
+
+  //keyIsPressed = -1 (for black color);
   @0
   D=A-1
   @keyIsPressed
   M=D
 
-  //maxRAM = 24576
-  @24576
-  D=A
-  @maxRAM
+  //keyIsPressed = 0 (for white color)
+  (noKeyPress)
+  @0
+  @keyIsPressed
   M=D
 
   //screenRAM = 16384
