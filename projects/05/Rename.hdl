@@ -1,0 +1,8 @@
+CHIP Rename {
+    IN in;
+    OUT out;
+
+    PARTS:
+	Not(in = in, out = flipped);
+    Not(in = flipped, out = out);
+}

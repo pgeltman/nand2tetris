@@ -43,27 +43,27 @@ CHIP CPU {
     //fetch instruction at ROM[PC]
 
     //MX1: Either take the output from the ALU or the next instruction, based on something from the CPU, but not sure what yet
-    Mux16(a = ALUOut, b = instruction, sel = instruction[0], out = ARegisterIn);
+    Mux16(a = instruction, b = ALUOut, sel = cIns, out = ARegIn);
 
-    //A register, load pin instruction[10]
-    ARegister(in = ARegisterIn, load = instruction[10], out = ARegisterOut, out[0..14] = addressM);
+    //A Reg, load pin instruction[10]???
+    ARegister(in = ARegIn, load = ALoad, out = ARegOut, out[0..14] = addressM);
 
     //D register, load pin from instruction[11]
-    DRegister(in = ALUOut, load = instruction[11], out = DRegisterOut);
+    DRegister(in = ALUOut, load = DLoad, out = DRegOut);
 
     //Program counter, not sure what causes the load pin, or increment pin
-    PC(in = ARegisterIn, load = jump, inc = nojump, reset=reset, out[0..14] = pc);
+    PC(in = ARegIn, load = jump, inc = nojump, reset=reset, out[0..14] = pc);
 
     //MX2: Either take the output from the ALU or the next instruction, based on something from the CPU, but not sure what yet
-    Mux16(a = ARegisterOut, b = inM, sel = instruction[3], out = MX2Out);
+    Mux16(a = ARegOut, b = inM, sel = instruction[3], out = MX2Out);
 
     //ALU
-    ALU(x = DRegisterOut, y = MX2Out, zx = instruction[4], nx = instruction[5], zy = instruction[6], ny = instruction[7], f = instruction[8], no = instruction[9], out = outM, out = ALUOut, zr = zr, ng = ng);
+    ALU(x = DRegOut, y = MX2Out, zx = zx, nx = nx, zy = zy, ny = ny, f = f, no = no, out = outM, out = ALUOut, zr = zr, ng = ng);
 
     //CONTROL UNIT
 
     //variables that belong to the control UNIT
-    //ARegisterLoad, DRegisterLoad, PCLoad, PCinc
+    //ARegLoad, DLoad, PCLoad, PCinc
 
 
     // i-xx-a-cccccc-ddd-jjj
@@ -72,30 +72,42 @@ CHIP CPU {
     // ddd = destination
     // jjj = jump
 
-    //instruction[0] i = instruction type (0:A, 1:C) - MX1 selector bit
-    //instruction[1] x
-    //instruction[2] x
-    //instruction[3] a = MX2 selector bit
-    //instruction[4] c1 = zx bit
-    //instruction[5] c2 = nx bit
-    //instruction[6] c3 = zy bit
-    //instruction[7] c4 = ny bit
-    //instruction[8] c5 = f bit
-    //instruction[9] c6 = no bit
-    //instruction[10] d1 = ARegisterLoad
-    //instruction[11] d2 = DRegisterLoad
-    //instruction[12] d3 = writeM
-    //instruction[13] j1 =
-    //instruction[14] j2 =
-    //instruction[15] j3 =
+    //instruction[15] i = instruction type (0:A, 1:C) - MX1 selector bit
+    Rename(in = instruction[15], out = cIns);
+    //instruction[14] x
+    //instruction[13] x
+    //instruction[12] a = MX2 selector bit
+    //instruction[11] c1 = zx bit
+    Rename(in = instruction[11], out = zx);
+    //instruction[10] c2 = nx bit
+    Rename(in = instruction[10], out = nx);
+    //instruction[9] c3 = zy bit
+    Rename(in = instruction[9], out = zy);
+    //instruction[8] c4 = ny bit
+    Rename(in = instruction[8], out = ny);
+    //instruction[7] c5 = f bit
+    Rename(in = instruction[7], out = f);
+    //instruction[6] c6 = no bit
+    Rename(in = instruction[6], out = no);
+    //instruction[5] d1 = ARegLoad
+    Rename(in = instruction[4], out = ALoad);
+    //instruction[4] d2 = DLoad
+    Rename(in = instruction[4], out = DLoad);
+    //instruction[3] d3 = writeM
+    //instruction[2] j1 =
+    Rename(in = instruction[2], out = j1);
+    //instruction[1] j2 =
+    Rename(in = instruction[1], out = j2);
+    //instruction[0] j3 =
+    Rename(in = instruction[0], out = j3);
 
     //JUMP COMMANDS TO PROGRAM COUNTER INTERPRETATION
 
     //checks to see if we care that the answer < 0 and then checks to see if the answer is < 0
-    And(a = ng, b = instruction[13], out = j1true);
+    And(a = ng, b = j1, out = j1true);
 
     //checks to see if we care that the answer = 0 and then checks to see if the answer is 0
-    And(a = zr, b = instruction[14], out = j2true);
+    And(a = zr, b = j2, out = j2true);
 
     //checks to see if either zr or ng are true
     Or(a = zr, b = ng, out = lessOrEqualTo);
@@ -104,7 +116,7 @@ CHIP CPU {
     Not(in = lessOrEqualTo, out = greaterThan);
 
     //checks to see if we care that the answer > 0 and then checks to see if the answer is > 0
-    And(a = greaterThan, b = instruction[14], out = j3true);
+    And(a = greaterThan, b = j2, out = j3true);
 
     //Runs a check to see if any of our jump conditions are met
     Or8Way(in[0] = j1true, in[1] = j2true, in[2] = j3true, out = jump);
