@@ -121,8 +121,21 @@ tick, output, tock, output;
 set instruction %B1110111111010000, // D=1
 tick, output, tock, output;
 
+
+//Current problem
+//Current problem
+//Current problem
+//Current problem
+//Current problem
+//Current problem
+//Current problem
+//Current problem
+//Current problem
+//Current problem
+
+
 set instruction %B1110001100000001, // D;JGT
-tick, output, tock, output;
+tick, output; tock, output;
 
 set instruction %B1110001100000010, // D;JEQ
 tick, output, tock, output;

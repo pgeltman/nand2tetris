@@ -52,10 +52,10 @@ CHIP CPU {
     DRegister(in = ALUOut, load = DLoad, out = DRegOut);
 
     //Program counter, not sure what causes the load pin, or increment pin
-    PC(in = ARegIn, load = jump, inc = nojump, reset=reset, out[0..14] = pc);
+    PC(in = ARegOut, load = jump, inc = nojump, reset=reset, out[0..14] = pc);
 
     //MX2: Either take the output from the ALU or the next instruction, based on something from the CPU, but not sure what yet
-    Mux16(a = ARegOut, b = inM, sel = instruction[3], out = MX2Out);
+    Mux16(a = ARegOut, b = inM, sel = aSel, out = MX2Out);
 
     //ALU
     ALU(x = DRegOut, y = MX2Out, zx = zx, nx = nx, zy = zy, ny = ny, f = f, no = no, out = outM, out = ALUOut, zr = zr, ng = ng);
@@ -74,30 +74,55 @@ CHIP CPU {
 
     //instruction[15] i = instruction type (0:A, 1:C) - MX1 selector bit
     Rename(in = instruction[15], out = cIns);
+
+    //create the aInstruction selector
+    Not(in=cIns, out=aIns);
+
     //instruction[14] x
     //instruction[13] x
     //instruction[12] a = MX2 selector bit
+    Rename(in = instruction[12], out = aSel);
+
     //instruction[11] c1 = zx bit
     Rename(in = instruction[11], out = zx);
+
     //instruction[10] c2 = nx bit
     Rename(in = instruction[10], out = nx);
+
     //instruction[9] c3 = zy bit
     Rename(in = instruction[9], out = zy);
+
     //instruction[8] c4 = ny bit
     Rename(in = instruction[8], out = ny);
+
     //instruction[7] c5 = f bit
     Rename(in = instruction[7], out = f);
+
     //instruction[6] c6 = no bit
     Rename(in = instruction[6], out = no);
+
     //instruction[5] d1 = ARegLoad
-    Rename(in = instruction[4], out = ALoad);
+    Rename(in = instruction[5], out = AOutLoad);
+
+    //Load if either the output is the A register or if it's an aInstruction
+    Or(a = AOutLoad, b = aIns, out = ALoad);
+
     //instruction[4] d2 = DLoad
-    Rename(in = instruction[4], out = DLoad);
+    Rename(in = instruction[4], out = wouldLoadD);
+
+    And(a = wouldLoadD, b = cIns, out = DLoad);
+
     //instruction[3] d3 = writeM
+    Rename(in = instruction[3], out = wouldWriteM);
+
+    And(a = wouldWriteM, b = cIns, out = writeM);
+
     //instruction[2] j1 =
     Rename(in = instruction[2], out = j1);
+
     //instruction[1] j2 =
     Rename(in = instruction[1], out = j2);
+
     //instruction[0] j3 =
     Rename(in = instruction[0], out = j3);
 
@@ -116,10 +141,13 @@ CHIP CPU {
     Not(in = lessOrEqualTo, out = greaterThan);
 
     //checks to see if we care that the answer > 0 and then checks to see if the answer is > 0
-    And(a = greaterThan, b = j2, out = j3true);
+    And(a = greaterThan, b = j3, out = j3true);
 
     //Runs a check to see if any of our jump conditions are met
-    Or8Way(in[0] = j1true, in[1] = j2true, in[2] = j3true, out = jump);
+    Or8Way(in[0] = j1true, in[1] = j2true, in[2] = j3true, out = couldJump);
+
+    //Checks to see if this is a C instruction before allowing the jump
+    And(a = couldJump, b = cIns, out = jump);
 
     //if not jump, inc = true;
     Not(in = jump, out = nojump);
