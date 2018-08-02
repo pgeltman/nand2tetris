@@ -1,68 +1,96 @@
-#Hack assembler
+import mods, cIns
 print("hack assembler".upper())
-
-#input the asm file location
-#filepath = input("Filepath to ASM file: ")
 
 #hard coded filepaths
 path = 'C:\\Users\\Pgeltman\\Documents\\My Special Projects\\nand2tetris\\projects\\06\\'
 
-projNo = int(input("What project should I assemble (1 - 3): "))
+projNo = int(input("What project should I assemble (1 - 4): "))
 
 if projNo == 1 or projNo == False:
-    project='add\\Add.asm'
-    projName = "Add"
+    folder='add\\'
+    project= "Add"
 elif projNo == 2:
-    project='max\\Max.asm'
-    projName = "Max"
+    folder='max\\'
+    project = "MaxL"
 elif projNo == 3:
-    project='pong\\Pong.asm'
-    projName = "Pong"
+    folder='pong\\'
+    project = "PongL"
+elif projNo == 4:
+    folder='rect\\'
+    project = "RectL"
 
-filepath = path + project
+asm = path + folder + project + '.asm'
+hack = path + folder + project + '.hack'
+
 
 #open the asm
-prog = open(filepath, 'r')
+progAsm = open(asm, 'r')
+
+#open the hack
+progHack = open(hack, 'w+')
 
 line_count = 1
 
-for line in prog:
+#main loop through the program
+for line in progAsm:
 
-    #first real character
-    j = 0
-    for letter in line:
-        if letter != ' ':
-            k = line[j]
-            break
-        elif j == len(line):
-            line_type = "blank"
-        j += 1
+    out = 'no output'
+    line_type = 'blank'
+
+    #determine the indext of the first real character (i.e. not a blank space)
+    f = mods.first(line)
+    first = line[f]
+
+    #determin the index of the last real character (i.e. not a comment)
+    l = mods.last(line)
+    last = line[l]
 
     #comments
-    if (k == '/'):
+    if first == '/':
         line_type = 'comment'
 
     #a instructions
-    elif (k == '@'):
+    elif first == '@':
+
+        line_type = 'a ins'
 
         #takes the rest of the line after the '@'
-        address = line[j+1:len(line)-1]
+        address = line[f+1:l]
 
-        line_type = address
+        if mods.is_number(address) == True:
 
+            #convert to integer
+            address = int(address)
+
+            #convert to binary
+            address = int(f"{address:b}")
+
+            #make it 16 digits
+            address = "%016d" % address
+
+            out = address
+
+        else:
+            address = "XXX"
+            out = address
     #identify labels
-    elif (k == '('):
+    elif first == '(':
         line_type = 'label'
 
     #identify c instruction
-    elif (k == '0') or (k == 'D') or (k == 'M'):
+    elif (first == '0') or (first == 'D') or (first == 'M') or (first == 'A'):
         line_type = 'c ins'
+        decode = str(cIns.decode(line[f:l]))
+        out = "111" + decode
 
-    else:
-        line_type = 'blank'
+    print ('%d : "%s" : %s' % (line_count, line_type, out))
 
-    print ('%d : "%s"' % (line_count, line_type))
+    if out != 'no output':
+        progHack.write(out + '\n')
 
     line_count += 1
+
+progAsm.close()
+progHack.close()
 
 end = input("Done.")
