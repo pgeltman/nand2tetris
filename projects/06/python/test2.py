@@ -1,3 +1,3 @@
 import cIns
-
-cIns.decode('M=A;JMP')
+code = input("Enter code to assemble: ")
+print(code + " : 111" + cIns.decode(code))

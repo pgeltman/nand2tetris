@@ -83,7 +83,7 @@ for line in progAsm:
         decode = str(cIns.decode(line[f:l]))
         out = "111" + decode
 
-    print ('%d : "%s" : %s' % (line_count, line_type, out))
+    print ('%d : "%s" : %s' % (line_count, line[f:l], out))
 
     if out != 'no output':
         progHack.write(out + '\n')

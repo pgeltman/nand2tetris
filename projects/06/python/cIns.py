@@ -12,7 +12,7 @@ def decode(line):
 
     #define the comp dictionary
     compDic = {'0' : '0101010', '1' : '0111111', '-1' : '0111010', 'D' : '0001100',
-    'A' : '0110000', '!D' : '0001101', '!A' : '0110001','-D' : '0001111', 
+    'A' : '0110000', '!D' : '0001101', '!A' : '0110001','-D' : '0001111',
     '-A' : '0110011','D+1' : '0011111', 'A+1' : '0110111', 'D-1' : '0001110',
     'A-1' : '0110010', 'D+A' : '0000010', 'D-A' : '0010011', 'A-D' : '0000111',
     'D&A' : '0000000', 'D|A' : '0010101', 'M' : '1110000', '!M' : '1110001',
@@ -33,8 +33,6 @@ def decode(line):
     #determine the dest
     if equals != -1:
         dest = line[0:equals]
-    elif semicolon != -1:
-        dest = line[0:semicolon]
     else:
         dest = '0'
 
@@ -54,6 +52,6 @@ def decode(line):
     else:
         jump = '0'
 
-    return(destDic[dest] + compDic[comp] + jumpDic[jump])
+    return(compDic[comp] + destDic[dest] + jumpDic[jump])
 
     #DECODE DEST, COMP, and JUMP
