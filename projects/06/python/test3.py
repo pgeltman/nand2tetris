@@ -20,7 +20,7 @@ elif projNo == 4:
     project = "Rect"
 
 asm = path + folder + project + '.asm'
-hack = path + folder + project + '-comp.hack'
+hack = path + folder + project + '.hack'
 
 
 #open the asm
@@ -29,12 +29,10 @@ progAsm = open(asm, 'r')
 #open the hack
 progHack = open(hack, 'w+')
 
+line_count = 1
+
 #generate a dictionary of symbols and their associated registers
 symDic = symb.id(progAsm)
-progAsm.close()
-progAsm = open(asm, 'r')
-
-line_count = 1
 
 #main loop through the program
 for line in progAsm:
@@ -62,15 +60,22 @@ for line in progAsm:
         #takes the rest of the line after the '@'
         address = line[f+1:l]
 
-        if mods.is_number(address) == False:
+        if mods.is_number(address) == True:
 
-            address = symDic[address]
+            #convert to integer
+            address = int(address)
 
-        address = int(address) #convert to integer
-        address = int(f"{address:b}") #convert to binary
-        address = "%016d" % address #make it 16 digits
-        out = address
+            #convert to binary
+            address = int(f"{address:b}")
 
+            #make it 16 digits
+            address = "%016d" % address
+
+            out = address
+
+        else:
+            address = "XXX"
+            out = address
     #identify labels
     elif first == '(':
         line_type = 'label'
@@ -89,7 +94,5 @@ for line in progAsm:
 
     line_count += 1
 
-progAsm.close()
-progHack.close()
 
 end = input("Done.")
