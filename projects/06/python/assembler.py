@@ -34,7 +34,7 @@ symDic = symb.id(progAsm)
 progAsm.close()
 progAsm = open(asm, 'r')
 
-line_count = 1
+line_count = 0
 
 #main loop through the program
 for line in progAsm:
@@ -85,9 +85,7 @@ for line in progAsm:
 
     if out != 'no output':
         progHack.write(out + '\n')
-        line_count -= 1
-
-    line_count += 1
+        line_count += 1
 
 progAsm.close()
 progHack.close()
